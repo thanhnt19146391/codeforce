@@ -12,12 +12,20 @@ def solve():
         a = array('i', inp(int))
         b = array('i', inp(int))
 
-        # Array c using for marking member who presented slide
+        # c: array using for marking member who presented slide
+        # if member 'x' presented slide, c[x] = 1, 
+        # otherwise c[x] = 0
         c = array('i', (n + 1) * [0])
+
+        # res: state the presentation that is either
+        # good or not at the instant. Initially, 'res' was set 1.
         res = 1
+
+        # j: the index of the current member who is front of lineup. 
         j = 0
+
         for i in range(len(b)):
-            if j == len(a):
+            if j == len(a): # All member presented slide and was pending 
                 break
             elif (a[j] == b[i]):
                 c[a[j]] = 1
