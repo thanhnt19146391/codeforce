@@ -35,15 +35,22 @@ def check1():
 
 def solve():
     t = int(input())
-    global n, m, q, a, b
+    # global n, m, q, a, b
     for _ in range(t):
         n, m, q = inp(int)
         a = array('i', inp(int))
         b = array('i', inp(int))
-        check0()
+        # first[x] : the set containning the indices of occurrence of member x
+        first = (n + 1) * [array('i', [])] 
+        print(first)
+        for i in range(m):
+            first[b[i]].append(i)
+        print(first)
+
+        # check0()
         for _ in range(q):
             s, t = inp(int)
-            check1()
+        #     check1()
 
 
 
