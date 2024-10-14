@@ -4,57 +4,54 @@ from array import array
 input = lambda: sys.stdin.buffer.readline().decode().rstrip()
 inp = lambda dtype: [dtype(x) for x in input().split()]
 
-def check0():
-    # c: array using for marking member who presented slide
-    # if member 'x' presented slide, c[x] = 1, 
-    # otherwise c[x] = 0
-    c = array('i', (n + 1) * [0])
-
-    # res: state the presentation that is either
-    # good or not at the instant. Initially, 'res' was set 1.
+def check1():
+    global first, ans
+    # print(first)
     res = 1
-
-    # j: the index of the current member who is front of lineup. 
-    j = 0
-
-    for i in range(len(b)):
-        if j == len(a): # All member presented slide and was pending 
-            break
-        elif (a[j] == b[i]):
-            c[a[j]] = 1
-            j += 1
-        elif (c[b[i]]):
-            pass
-        else:
+    for i in range(n - 1):
+        if first[a[i]] > first[a[i + 1]]:
             res = 0
             break
-    print('YA' if res else 'TIDAK')
+    ans.append('YA' if res else 'TIDAK')
 
-def check1():
-    pass
+def _get_first_position(member: int):
+    global sets, m
+    pos_set = sets[member]
+    if len(pos_set) == 0:
+        return m
+    return array('i', pos_set)[0]
 
 def solve():
     t = int(input())
-    # global n, m, q, a, b
+    global n, m, q, a, b, ans
+    ans = []
     for _ in range(t):
         n, m, q = inp(int)
         a = array('i', inp(int))
         b = array('i', inp(int))
-        # first[x] : the set containning the indices of occurrence of member x
-        first = (n + 1) * [array('i', [])] 
-        print(first)
+        global sets
+        # sets[x] : the set containning the indices of occurrence of member x
+        sets = [set() for _ in range(n + 1)]
         for i in range(m):
-            first[b[i]].append(i)
-        print(first)
+            sets[b[i]].add(i)
+        global first
+        first = array('i', (n + 1) * [0])
+        for x in a:
+            first[x] = _get_first_position(member = x)
+        check1()
 
-        # check0()
         for _ in range(q):
             s, t = inp(int)
-        #     check1()
-
-
-
-        
+            pos = s - 1
+            member = b[pos]
+            sets[t].add(pos)
+            sets[member].remove(pos)
+            # print(sets)
+            first[t] = _get_first_position(member = t)
+            first[member] = _get_first_position(member = member)
+            check1()
+            b[pos] = t
+    print('\n'.join([x for x in ans]))
 
 if __name__ == '__main__':
     solve()
